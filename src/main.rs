@@ -1,22 +1,22 @@
 use sysinfo::{NetworkExt, NetworksExt, ProcessExt, System, SystemExt};
+use std::time::Duration;
+use std::thread::sleep;
 
 fn main() {
-    // Please note that we use "new_all" to ensure that all list of
-    // components, network interfaces, disks and users are already
-    // filled!
+    let app_name = "eog";
     let mut sys = System::new_all();
+    let check_delay = Duration::new(0, 50000);
 
-    // First we update all information of our `System` struct.
-    sys.refresh_all();
+    loop {
+        sys.refresh_all();
 
-    let app_name = "calc";
-
-    // Display processes ID, name na disk usage:
-    for (pid, process) in sys.processes() {
-        if !process.name().to_lowercase().contains(&app_name.to_lowercase()) {
-            continue;
+        for (pid, process) in sys.processes() {
+            if !process.name().to_lowercase().contains(&app_name.to_lowercase()) {
+                continue;
+            }
+            println!("{}: status: {}", process.name(), process.status());
         }
-        println!("[{}] {} {:?}", pid, process.name(), process.disk_usage());
-        println!("{:#?}", process);
+
+        sleep(check_delay);
     }
 }
