@@ -9,11 +9,14 @@ fn main() {
     // First we update all information of our `System` struct.
     sys.refresh_all();
 
+    let app_name = "calc";
+
     // Display processes ID, name na disk usage:
     for (pid, process) in sys.processes() {
-        if !process.name().to_lowercase().contains("firefox") {
+        if !process.name().to_lowercase().contains(&app_name.to_lowercase()) {
             continue;
         }
         println!("[{}] {} {:?}", pid, process.name(), process.disk_usage());
+        println!("{:#?}", process);
     }
 }
