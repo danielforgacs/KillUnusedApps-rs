@@ -5,8 +5,8 @@ use std::thread::sleep;
 fn main() {
     let app_name = "eog";
     let mut sys = System::new_all();
-    let check_delay = Duration::new(0, 50000);
-    let kill_delay = Duration::new(10, 0);
+    let check_delay = Duration::new(2, 0);
+    let kill_delay = Duration::new(30, 0);
     let mut last_running = Instant::now();
 
     loop {
@@ -26,7 +26,6 @@ fn main() {
                 println!("sleeping: {:?}", Instant::now() - last_running);
                 if  Instant::now() - last_running > kill_delay {
                     process.kill();
-                    return;
                 }
             }
         }
