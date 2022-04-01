@@ -1,11 +1,12 @@
-use sysinfo::{NetworkExt, NetworksExt, ProcessExt, System, SystemExt};
-use std::time::Duration;
+use sysinfo::{ProcessExt, System, SystemExt};
+use std::time::{Duration, Instant};
 use std::thread::sleep;
 
 fn main() {
     let app_name = "eog";
     let mut sys = System::new_all();
     let check_delay = Duration::new(0, 50000);
+    let mut last_running = Instant::now();
 
     loop {
         sys.refresh_all();
@@ -14,8 +15,16 @@ fn main() {
             if !process.name().to_lowercase().contains(&app_name.to_lowercase()) {
                 continue;
             }
-            println!("{}: status: {}", process.name(), process.status());
+
+            // println!("{}: status: {}", process.name(), process.status());
+
+            if process.status() == sysinfo::ProcessStatus::Run {
+                last_running = Instant::now();
+                println!("running...")
+            }
+
         }
+
 
         sleep(check_delay);
     }
