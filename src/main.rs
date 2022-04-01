@@ -6,6 +6,7 @@ fn main() {
     let app_name = "eog";
     let mut sys = System::new_all();
     let check_delay = Duration::new(0, 50000);
+    let kill_delay = Duration::new(10, 0);
     let mut last_running = Instant::now();
 
     loop {
@@ -21,10 +22,14 @@ fn main() {
             if process.status() == sysinfo::ProcessStatus::Run {
                 last_running = Instant::now();
                 println!("running...")
+            } else {
+                println!("sleeping: {:?}", Instant::now() - last_running);
+                if  Instant::now() - last_running > kill_delay {
+                    process.kill();
+                    return;
+                }
             }
-
         }
-
 
         sleep(check_delay);
     }
