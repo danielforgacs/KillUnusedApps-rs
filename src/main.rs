@@ -40,15 +40,15 @@ fn main() {
                 continue;
             }
 
-            // println!("{}: status: {}", process.name(), process.status());
-
             if process.status() == sysinfo::ProcessStatus::Run {
                 last_running = Instant::now();
             } else {
                 println!("sleeping: {:?}", Instant::now() - last_running);
 
                 if  Instant::now() - last_running > kill_delay {
-                    // process.kill();
+                    process.kill();
+                    println!("killed app.");
+                    return;
                 }
             }
         }
